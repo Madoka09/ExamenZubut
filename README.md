@@ -1,16 +1,18 @@
 # Examen para Full Stack Developer Zubut
 #### Desarrollado con ExpressJS y UIKit
 
-##### Requisitos
-- Sequelize
+##### Pre Requisitos
 - PostgreSQL
 - Node.js
 
 ##### Setup Inicial
+- Una vez configurado PostgreSQL porfavor, reemplaza las configuraciones en el archivo "config/config.json"
+
+- Inicializar Sequelize
+> npx sequelize-cli init
+
 - Instalar las dependencias de node
 > npm install 
-
-- Configurar la conexion a la Base de Datos en "config/config.json"
 
 - Crear la Base de Datos con el comando
 > npx run db:create
