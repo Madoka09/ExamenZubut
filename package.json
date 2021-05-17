@@ -1,0 +1,37 @@
+{
+  "name": "examen-zubut",
+  "version": "1.0.0",
+  "description": "Examen para proceso de seleccion de Zubut",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon -r dotenv/config index.js",
+    "db:create": "npx sequelize-cli db:create",
+    "db:g:seed": "sequelize-cli seed:generate --name",
+    "db:seeds": "sequelize-cli db:seed:all"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Madoka09/ExamenZubut.git"
+  },
+  "author": "Juan Francisco Galván De Santiago",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Madoka09/ExamenZubut/issues"
+  },
+  "homepage": "https://github.com/Madoka09/ExamenZubut#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.2",
+    "nodemon": "^2.0.7",
+    "pg": "^8.6.0",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.6.2",
+    "sequelize-auto": "^0.8.3",
+    "sequelize-auto-migrations": "git+https://github.com/Scimonster/sequelize-auto-migrations.git",
+    "sequelize-cli": "^6.2.0"
+  }
+}

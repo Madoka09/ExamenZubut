@@ -1,0 +1,117 @@
+{
+    "tables": {
+        "empresas": {
+            "tableName": "empresas",
+            "schema": {
+                "id": {
+                    "autoIncrement": true,
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "nombre_legal": {
+                    "allowNull": false,
+                    "field": "nombre_legal",
+                    "seqType": "Sequelize.STRING(50)"
+                },
+                "nombre_comercial": {
+                    "allowNull": false,
+                    "field": "nombre_comercial",
+                    "seqType": "Sequelize.STRING(65)"
+                },
+                "rfc": {
+                    "allowNull": false,
+                    "field": "rfc",
+                    "seqType": "Sequelize.STRING(13)"
+                },
+                "telefono": {
+                    "allowNull": false,
+                    "field": "telefono",
+                    "seqType": "Sequelize.STRING(20)"
+                },
+                "fecha_registro": {
+                    "allowNull": false,
+                    "field": "fecha_registro",
+                    "seqType": "Sequelize.DATEONLY"
+                }
+            },
+            "indexes": []
+        },
+        "roles": {
+            "tableName": "roles",
+            "schema": {
+                "id": {
+                    "autoIncrement": true,
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "rol": {
+                    "allowNull": false,
+                    "field": "rol",
+                    "seqType": "Sequelize.STRING(25)"
+                }
+            },
+            "indexes": []
+        },
+        "usuarios": {
+            "tableName": "usuarios",
+            "schema": {
+                "id": {
+                    "autoIncrement": true,
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "nombre": {
+                    "allowNull": false,
+                    "field": "nombre",
+                    "seqType": "Sequelize.STRING(60)"
+                },
+                "apellido": {
+                    "allowNull": false,
+                    "field": "apellido",
+                    "seqType": "Sequelize.STRING(80)"
+                },
+                "email": {
+                    "allowNull": false,
+                    "field": "email",
+                    "seqType": "Sequelize.STRING(80)"
+                },
+                "password": {
+                    "allowNull": false,
+                    "field": "password",
+                    "seqType": "Sequelize.STRING(100)"
+                },
+                "rol_id": {
+                    "allowNull": false,
+                    "references": {
+                        "model": "roles",
+                        "key": "id"
+                    },
+                    "field": "rol_id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "empresa_id": {
+                    "allowNull": false,
+                    "references": {
+                        "model": "empresas",
+                        "key": "id"
+                    },
+                    "field": "empresa_id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "ultima_vez": {
+                    "allowNull": true,
+                    "field": "ultima_vez",
+                    "seqType": "Sequelize.DATEONLY"
+                }
+            },
+            "indexes": []
+        }
+    },
+    "revision": 1
+}

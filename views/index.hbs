@@ -1,0 +1,159 @@
+<div class="uk-background-cover uk-height-medium uk-panel uk-flex uk-flex-middle uk-flex-center"
+    style="background-image: url(media/cover.jpg);" uk-height-viewport>
+    <div class="uk-position-top">
+        <nav class="uk-navbar-container uk-margin uk-navbar-transparent" uk-navbar>
+            <div class="uk-navbar-left">
+                <a class="uk-navbar-item uk-logo" href="#">Examen Fullstack Developer</a>
+            </div>
+
+            <div class="uk-navbar-right">
+                <ul class="uk-navbar-nav">
+                    <ul class="uk-navbar-nav">
+                        <li>
+                            <a href="https://www.linkedin.com/in/juan-francisco-galv%C3%A1n-de-santiago-503764187/">
+                                <span class="uk-icon uk-margin-small-right" uk-icon="icon: linkedin"></span>
+                                LinkedIn
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/Madoka09/">
+                                <span class="uk-icon uk-margin-small-right" uk-icon="icon: github"></span>
+                                Github
+                            </a>
+                        </li>
+                    </ul>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div>
+        <h1 class="uk-heading-large uk-heading-divider">¡Hola!</h1>
+        <hr>
+        <a class="uk-button uk-button-secondary uk-width-1-1 uk-margin-small-bottom" href="#login-modal"
+            uk-toggle>Acceder</a>
+    </div>
+
+
+</div>
+
+<!--MODAL DE INICIO DE SESIÓN-->
+<div id="login-modal" class="uk-flex-top" bg-close="false" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+        <div class="uk-modal-header">
+            <h2 class="uk-modal-title">Iniciar Sesión</h2>
+        </div>
+        <div class="uk-modal-body">
+            <form method="POST" action="/login">
+                <fieldset class="uk-fieldset">
+
+                    <legend class="uk-legend">Correo Electrónico</legend>
+
+                    <div class="uk-margin">
+                        <input name="email" id="email" class="uk-input" type="text" placeholder="ejemplo@ejemplo.com">
+                    </div>
+
+                    <legend class="uk-legend">Contraseña</legend>
+
+                    <div class="uk-margin">
+                        <input name="password" id="password" class="uk-input" type="password" placeholder="Contraseña">
+                    </div>
+
+                    <br>
+                    <a class="uk-button uk-button-link" href="#register-modal" uk-toggle>Registrarse</a>
+                    <br>
+
+                </fieldset>
+                <div class="uk-modal-footer uk-text-right">
+                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
+                    <button class="uk-button uk-button-secondary" type="submit">Entrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--FIN MODAL INICIO DE SESION-->
+
+<!--MODAL DE REGISTRO-->
+<div id="register-modal" class="uk-modal-full" uk-modal>
+    <div class="uk-modal-dialog">
+        <button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
+        <div class="uk-margin-auto-vertical">
+            <div class="uk-padding-large" uk-height-viewport>
+                <h1>Introduce tus Datos</h1>
+                <form method="POST" action="/registrar">
+                    <fieldset class="uk-fieldset">
+
+                        <legend class="uk-legend">Nombre(s)</legend>
+
+                        <div class="uk-margin">
+                            <input name="nombre" id="nombre" class="uk-input" type="text"
+                                placeholder="Introduce tu Nombre">
+                        </div>
+
+                        <legend class="uk-legend">Apellido(s)</legend>
+
+                        <div class="uk-margin">
+                            <input name="apellido" id="apellido" class="uk-input" type="text"
+                                placeholder="Introduce tu Apellido">
+                        </div>
+
+                        <legend class="uk-legend">Correo Electrónico</legend>
+
+                        <div class="uk-margin">
+                            <input name="email" id="email" class="uk-input" type="text"
+                                placeholder="ejemplo@ejemplo.com">
+                        </div>
+
+                        <legend class="uk-legend">Contraseña</legend>
+
+                        <div class="uk-margin">
+                            <input name="password" id="password" class="uk-input" type="password"
+                                placeholder="Contraseña">
+                        </div>
+
+                        <legend class="uk-legend">Confirmar Contraseña</legend>
+
+                        <div class="uk-margin">
+                            <input name="password_confirm" id="password_confirm" class="uk-input" type="password"
+                                placeholder="Confirma tu Contraseña">
+                        </div>
+
+                        <legend class="uk-legend">Rol</legend>
+
+                        <div class="uk-margin">
+                            <div class="uk-form-controls">
+                                <select name="rol" id="rol" class="uk-select" id="form-stacked-select">
+                                    <option selected>Seleccionar Rol...</option>
+                                    {{#each roles as |rol|}}
+                                    <option value="{{rol.id}}">{{rol.rol}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+
+                        <legend class="uk-legend">Empresa</legend>
+
+                        <div class="uk-margin">
+                            <div class="uk-form-controls">
+                                <select name="empresa" id="empresa" class="uk-select" id="form-stacked-select">
+                                    <option selected>Seleccionar Empresa...</option>
+                                    {{#each empresas as |empresa|}}
+                                    <option value="{{empresa.id}}">{{empresa.nombre_legal}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                    <div class="uk-modal-footer uk-text-right">
+                        <button class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</button>
+                        <button class="uk-button uk-button-secondary" type="submit">Registrarse</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--FIN MODAL DE REGISTRO-->
