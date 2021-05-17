@@ -1,21 +1,21 @@
 {
   "development": {
     "username": "postgres",
-    "password": "Ikaros2009",
+    "password": "",
     "database": "api_test",
     "host": "localhost",
     "dialect": "postgres"
   },
   "test": {
     "username": "postgres",
-    "password": "Ikaros2009",
+    "password": "",
     "database": "api_test",
     "host": "localhost",
     "dialect": "postgres"
   },
   "production": {
     "username": "postgres",
-    "password": "Ikaros2009",
+    "password": "",
     "database": "api_test",
     "host": "localhost",
     "dialect": "postgres"

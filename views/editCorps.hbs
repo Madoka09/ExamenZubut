@@ -1,0 +1,65 @@
+<nav class="uk-navbar-container uk-margin" uk-navbar>
+    <div class="uk-navbar-left">
+        <a class="uk-navbar-item uk-logo" href="/">Examen Fullstack Developer</a>
+    </div>
+
+    <div class="uk-navbar-right">
+        <ul class="uk-navbar-nav">
+            <ul class="uk-navbar-nav">
+                <li>
+                    <a href="https://www.linkedin.com/in/juan-francisco-galv%C3%A1n-de-santiago-503764187/">
+                        <span class="uk-icon uk-margin-small-right" uk-icon="icon: linkedin"></span>
+                        LinkedIn
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/Madoka09/">
+                        <span class="uk-icon uk-margin-small-right" uk-icon="icon: github"></span>
+                        Github
+                    </a>
+                </li>
+            </ul>
+        </ul>
+    </div>
+</nav>
+
+<div class="uk-container">
+    <h1>Editar Empresa</h1>
+    <form method="POST" action="/actualizar-empresa/{{empresa.id}}">
+        <fieldset class="uk-fieldset">
+
+            <legend class="uk-legend">Nombre Legal</legend>
+
+            <div class="uk-margin">
+                <input name="nombre_legal" id="nombre_legal" class="uk-input" type="text"
+                    placeholder="Nombre Legal de la Empresa" maxlength="50" value="{{empresa.nombre_legal}}" required>
+            </div>
+
+            <legend class="uk-legend">Nombre Comercial</legend>
+
+            <div class="uk-margin">
+                <input name="nombre_comercial" id="nombre_comercial" class="uk-input" type="text"
+                    placeholder="Nombre Comercial de la Empresa" maxlength="65" value="{{empresa.nombre_comercial}}">
+            </div>
+
+            <legend class="uk-legend">RFC</legend>
+
+            <div class="uk-margin">
+                <input name="rfc" id="rfc" class="uk-input" type="text" placeholder="13 Carácteres" maxlength="13"
+                    required value="{{empresa.rfc}}">
+            </div>
+
+            <legend class="uk-legend">Teléfono</legend>
+
+            <div class="uk-margin">
+                <input name="telefono" id="telefono" class="uk-input" type="tel" placeholder="(XX) XXXX-XXXX"
+                    maxlength="20" required value="{{empresa.telefono}}">
+            </div>
+
+        </fieldset>
+        <div class="uk-modal-footer uk-text-right">
+            <a href="/dashboard" class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</a>
+            <button class="uk-button uk-button-secondary" type="submit">Editar Cambios</button>
+        </div>
+    </form>
+</div>

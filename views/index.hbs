@@ -29,7 +29,6 @@
 
     <div>
         <h1 class="uk-heading-large uk-heading-divider">¡Hola!</h1>
-        <hr>
         <a class="uk-button uk-button-secondary uk-width-1-1 uk-margin-small-bottom" href="#login-modal"
             uk-toggle>Acceder</a>
     </div>
@@ -89,42 +88,42 @@
 
                         <div class="uk-margin">
                             <input name="nombre" id="nombre" class="uk-input" type="text"
-                                placeholder="Introduce tu Nombre">
+                                placeholder="Introduce tu Nombre" maxlength="60" required>
                         </div>
 
                         <legend class="uk-legend">Apellido(s)</legend>
 
                         <div class="uk-margin">
                             <input name="apellido" id="apellido" class="uk-input" type="text"
-                                placeholder="Introduce tu Apellido">
+                                placeholder="Introduce tu Apellido" maxlength="80" required>
                         </div>
 
                         <legend class="uk-legend">Correo Electrónico</legend>
 
                         <div class="uk-margin">
-                            <input name="email" id="email" class="uk-input" type="text"
-                                placeholder="ejemplo@ejemplo.com">
+                            <input name="email" id="email" class="uk-input" type="email"
+                                placeholder="ejemplo@ejemplo.com" maxlength="80" required>
                         </div>
 
                         <legend class="uk-legend">Contraseña</legend>
 
                         <div class="uk-margin">
                             <input name="password" id="password" class="uk-input" type="password"
-                                placeholder="Contraseña">
+                                placeholder="Contraseña" maxlength="100" required>
                         </div>
 
                         <legend class="uk-legend">Confirmar Contraseña</legend>
 
                         <div class="uk-margin">
                             <input name="password_confirm" id="password_confirm" class="uk-input" type="password"
-                                placeholder="Confirma tu Contraseña">
+                                placeholder="Confirma tu Contraseña" maxlength="100" required>
                         </div>
 
                         <legend class="uk-legend">Rol</legend>
 
                         <div class="uk-margin">
                             <div class="uk-form-controls">
-                                <select name="rol" id="rol" class="uk-select" id="form-stacked-select">
+                                <select name="rol" id="rol" class="uk-select" id="form-stacked-select" required>
                                     <option selected>Seleccionar Rol...</option>
                                     {{#each roles as |rol|}}
                                     <option value="{{rol.id}}">{{rol.rol}}</option>
@@ -137,7 +136,7 @@
 
                         <div class="uk-margin">
                             <div class="uk-form-controls">
-                                <select name="empresa" id="empresa" class="uk-select" id="form-stacked-select">
+                                <select name="empresa" id="empresa" class="uk-select" id="form-stacked-select" required>
                                     <option selected>Seleccionar Empresa...</option>
                                     {{#each empresas as |empresa|}}
                                     <option value="{{empresa.id}}">{{empresa.nombre_legal}}</option>

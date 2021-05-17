@@ -32,7 +32,7 @@ module.exports = {
       },
       {
         nombre: "Fulano",
-        apellido: "De Tak",
+        apellido: "De Tal",
         email: "fulano@detal.com",
         password: "bKE9UspwyIPg8LsQHkJaiehiTeUdstI5JZOvaoQRgJA=",
         rol_id: 4,

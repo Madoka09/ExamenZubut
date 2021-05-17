@@ -1,27 +1,11 @@
-const {
-    Model,
-    DataTypes,
-    Sequelize
-} = require('sequelize');
-const Pool = require('pg').Pool;
 const crypto = require('crypto');
 const models = require('./models');
-const exphbs = require('express-handlebars');
 const Op = models.Sequelize.Op;
 
 //Modelos
 const Roles = models.Roles;
 const Empresas = models.Empresas;
 const Usuarios = models.Usuarios;
-
-const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'api_test',
-    password: 'Ikaros2009',
-    port: 5432,
-});
-
 
 //Funcion para encriptar la contraseña
 const getPassword = (password) => {
@@ -44,7 +28,7 @@ const getUsers = (request, response) => {
             response.status(200).json(data)
         })
         .catch(err => {
-            response.status(500)
+            response.status(500).send(err)
             console.log(err)
         })
 }
@@ -56,7 +40,7 @@ const getRoles = (request, response) => {
             response.status(200).json(data)
         })
         .catch(err => {
-            response.status(500)
+            response.status(500).send(err)
             console.log(err)
         })
 };
@@ -68,7 +52,7 @@ const getCorps = (request, response) => {
             response.status(200).json(data)
         })
         .catch(err => {
-            response.status(500)
+            response.status(500).send(err)
             console.log(err)
         })
 }
@@ -83,7 +67,7 @@ const getUserById = (request, response) => {
             response.status(200).json(data)
         })
         .catch(err => {
-            response.status(500)
+            response.status(500).send(err)
             console.log(err)
         })
 }
@@ -105,7 +89,7 @@ const getUserByEmail = (request, response) => {
             response.status(200).json(data)
         })
         .catch(err => {
-            response.status(500)
+            response.status(500).send(err)
             console.log(err)
         })
 }
@@ -120,7 +104,7 @@ const getRoleById = (request, response) => {
             response.status(200).json(data)
         })
         .catch(err => {
-            response.status(500)
+            response.status(500).send(err)
             console.log(err)
         })
 }
@@ -135,7 +119,7 @@ const getCorpById = (request, response) => {
             response.status(200).json(data)
         })
         .catch(err => {
-            response.status(500)
+            response.status(500).send(err)
             console.log(err)
         })
 }
@@ -191,16 +175,86 @@ const createUser = (request, response) => {
                         Usuarios.create(usuario)
                             .then(data => {
                                 console.log(data);
-                                return response.status(200).send('Usuario Creado')
+                                return response.redirect('/dashboard')
                             })
                             .catch(err => {
-                                response.status(500)
+                                response.status(500).send(err)
                                 console.log(err)
                             })
                     }
                 })
                 .catch(err => {
-                    response.status(500)
+                    response.status(500).send(err)
+                    console.log(err)
+                })
+        } catch (error) {
+            console.log('Ocurrio un error')
+        }
+    }
+}
+
+//Guardar Usuario
+const register = (request, response) => {
+    //Obtener datos del usuario a crear
+    const {
+        nombre,
+        apellido,
+        email,
+        password,
+        password_confirm,
+        empresa,
+        rol
+    } = request.body;
+
+    //Comprobar campos de contraseña
+    if (password === password_confirm) {
+
+        //Comprobar que el usuario existe
+        var condition = email ? {
+            email: {
+                [Op.like]: `%${email}`
+            }
+        } : null;
+
+        let existingU = '';
+        try {
+            Usuarios.findAll({
+                    where: condition
+                })
+                .then(data => {
+                    existingU = data;
+                    if (existingU.length == 1) {
+                        console.log(existingU)
+                        return response.status(200).send('El Usuario ya Existe')
+                    } else {
+                        //Encriptar contraseña
+                        const encryptedPass = getPassword(password);
+
+                        //Guardar Usuario nuevo
+                        const usuario = {
+                            nombre: nombre,
+                            apellido: apellido,
+                            email: email,
+                            password: encryptedPass,
+                            rol_id: rol,
+                            empresa_id: empresa,
+                            ultima_vez: new Date()
+                        }
+
+                        Usuarios.create(usuario)
+                            .then(data => {
+                                console.log('registro creado')
+                                return response.redirect('/')
+                            })
+                            .catch(err => {
+                                response.status(500).send(err)
+                                console.log(err)
+                            })
+
+                    }
+                })
+                .catch(err => {
+                    response.status(500).send(err)
                     console.log(err)
                 })
         } catch (error) {
@@ -229,9 +283,7 @@ const usrLogin = (request, response) => {
             })
             .then(data => {
                 existingU = data;
-                console.log(existingU.length)
                 if (existingU.length >= 1) {
-                    //console.log(existingU.length)
                     const authToken = generateAuthToken();
 
                     //Guardar galleta
@@ -240,22 +292,18 @@ const usrLogin = (request, response) => {
                     //Redirigir a vista protegida
                     return response.redirect('/dashboard');
                 } else {
-                    console.log('non')
                     return response.status(400).send('Compruebe Usuario/Contraseña e intente de nuevo')
                 }
             })
             .catch(err => {
-                response.status(500)
-                console.log(err)
+                response.status(500).send(err);
             })
 
         //console.log(existingU.length)
 
     } catch (error) {
-        response.status(500).send('Ocurrio un Error')
+        return response.status(500).send(error);
     }
-
-
 
 }
 
@@ -269,64 +317,157 @@ const createCorp = (request, response) => {
         telefono
     } = request.body;
 
-    pool.query(
-        'INSERT INTO empresas (nombre_legal, nombre_comercial, rfc, telefono) VALUES ($1, $2, $3, $4)',
-        [nombre_legal, nombre_comercial, rfc, telefono],
-        (error, results) => {
+    //Comprobar que la empresa existe
+    let existingCorp = '';
+    try {
+        Empresas.findAll({
+                where: {
+                    nombre_legal: nombre_legal,
+                    rfc: rfc
+                }
+            })
+            .then(data => {
+                existingCorp = data;
+                if (existingCorp.length >= 1) {
+                    return response.send('La Empresa ya Existe')
+                } else {
+                    //Guardar instancia de empresa nueva
+                    const newCorp = {
+                        nombre_legal: nombre_legal,
+                        nombre_comercial: nombre_comercial,
+                        rfc: rfc,
+                        telefono: telefono,
+                        fecha_registro: new Date()
+                    }
 
-            if (error) {
-                throw error
-            }
-            response.status(201).send(`Usuario: ${results.insertId} agregado con exito `);
-        })
+                    //Guardar nueva empresa
+                    Empresas.create(newCorp)
+                        .then(data => {
+                            console.log('OK')
+                            return response.redirect('/dashboard');
+                        })
+                        .catch(err => {
+                            response.status(500).send(err);
+                        })
+                }
+            })
+    } catch (error) {
+        return response.status(500).send(error);
+    }
+}
+
+//Crear Rol
+const createRole = (request, response) => {
+    //Obtener datos del request
+    const {
+        role
+    } = request.body;
+
+    //Comprobar que el rol existe
+    let existingRole = '';
+    try {
+        Roles.findAll({
+                where: {
+                    rol: role
+                }
+            })
+            .then(data => {
+                existingRole = data;
+                if (existingRole.length >= 1) {
+                    return response.send('El Rol ya Existe')
+                } else {
+                    //Guardar instancia de nuevo rol
+                    const newRole = {
+                        rol: role
+                    }
+
+                    //Guardar nuevo rol
+                    Roles.create(newRole)
+                        .then(data => {
+                            console.log('OK')
+                            return response.redirect('/dashboard');
+                        })
+                        .catch(err => {
+                            response.status(500).send(err);
+                        })
+                }
+            })
+    } catch (error) {
+        return response.status(500).send(error);
+    }
 }
 
 //Editar Usuario
 const updateUser = (request, response) => {
     //Obtener ID del evento de POST
     const id = parseInt(request.params.id);
-    const {
-        nombre,
-        apellido,
-        email,
-        password,
-        empresa,
-        rol
-    } = request.body;
 
-    pool.query(
-        'UPDATE users SET nombre = $1, apellido = $2, email = $3, password = $4, empresa = $5, rol = $6',
-        [nombre, apellido, email, password, empresa, rol],
-        (error, results) => {
-            if (error) {
-                throw error
+    //Actualizar registro
+    Usuarios.update(request.body, {
+            where: {
+                id: id
             }
-            response.status(200).send(`Usuario: ${id} modificado`);
-        }
-    )
+        })
+        .then(num => {
+            if (num == 1) {
+                console.log('OK')
+                return response.redirect('/dashboard')
+            } else {
+                return response.send(500)
+            }
+        })
+        .catch(err => {
+            response.status(500).send(err)
+        })
+
 }
 
 //Editar Empresa
 const updateCorp = (request, response) => {
     //Obtener ID del evento de POST
     const id = parseInt(request.params.id);
-    const {
-        nombre_legal,
-        nombre_comercial,
-        rfc,
-        telefono
-    } = request.body;
 
-    pool.query(
-        'UPDATE empresas SET nombre_legal = $1, nombre_comercial = $2, rfc = $3, telefono = $4',
-        [nombre_legal, nombre_comercial, rfc, telefono],
-        (error, results) => {
-            if (error) {
-                throw error
+    //Actualizar registro
+    Empresas.update(request.body, {
+            where: {
+                id: id
             }
-            response.status(200).send(`Usuario: ${id} modificado`);
-        }
-    )
+        })
+        .then(num => {
+            if (num == 1) {
+                console.log('OK')
+                return response.redirect('/dashboard')
+            } else {
+                return response.send(500)
+            }
+        })
+        .catch(err => {
+            response.status(500).send(err)
+        })
+}
+
+//Editar Rol
+const updateRole = (request, response) => {
+    //Obtener ID del evento de POST
+    const id = parseInt(request.params.id);
+
+    //Actualizar registro
+    Roles.update(request.body, {
+            where: {
+                id: id
+            }
+        })
+        .then(num => {
+            if (num == 1) {
+                console.log('OK')
+                return response.redirect('/dashboard')
+            } else {
+                return response.send(500)
+            }
+        })
+        .catch(err => {
+            response.status(500).send(err)
+        })
 }
 
 //Eliminar Usuario 
@@ -334,16 +475,23 @@ const deleteUser = (request, response) => {
     //Obtener ID del evento de POST
     const id = parseInt(request.params.id);
 
-    pool.query(
-        'DELETE FROM users WHERE user_id = $1',
-        [id],
-        (error, results) => {
-            if (error) {
-                throw error
+    //Borrar usuario
+    Usuarios.destroy({
+            where: {
+                id: id
             }
-            response.status(200).send(`Usuario: ${id} eliminado`);
-        }
-    )
+        })
+        .then(num => {
+            if (num == 1) {
+                console.log('OK')
+                return response.redirect('/dashboard')
+            } else {
+                return response.send(500)
+            }
+        })
+        .catch(err => {
+            response.status(500).send(err)
+        })
 }
 
 //Eliminar Empresa
@@ -351,16 +499,47 @@ const deleteCorp = (request, response) => {
     //Obtener ID del evento de POST
     const id = parseInt(request.params.id);
 
-    pool.query(
-        'DELETE FROM empresas WHERE empresa_id = $1',
-        [id],
-        (error, results) => {
-            if (error) {
-                throw error
+    //Borrar empresa
+    Empresas.destroy({
+            where: {
+                id: id
             }
-            response.status(200).send(`Empresa: ${id} eliminado`);
-        }
-    )
+        })
+        .then(num => {
+            if (num == 1) {
+                console.log('OK')
+                return response.redirect('/dashboard')
+            } else {
+                return response.send(500)
+            }
+        })
+        .catch(err => {
+            response.status(500).send(err)
+        })
+}
+
+//Borrar Rol
+const deleteRole = (request, response) => {
+    //Obtener ID del evento de POST
+    const id = parseInt(request.params.id);
+
+    //Borrar empresa
+    Roles.destroy({
+            where: {
+                id: id
+            }
+        })
+        .then(num => {
+            if (num == 1) {
+                console.log('OK')
+                return response.redirect('/dashboard')
+            } else {
+                return response.send(500)
+            }
+        })
+        .catch(err => {
+            response.status(500).send(err)
+        })
 }
 
 //Exportar metodos para poder acceder a ellos
@@ -377,5 +556,9 @@ module.exports = {
     updateCorp,
     deleteUser,
     deleteCorp,
-    usrLogin
+    usrLogin,
+    register,
+    createRole,
+    deleteRole,
+    updateRole
 }

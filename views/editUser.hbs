@@ -1,0 +1,51 @@
+<nav class="uk-navbar-container uk-margin" uk-navbar>
+    <div class="uk-navbar-left">
+        <a class="uk-navbar-item uk-logo" href="/">Examen Fullstack Developer</a>
+    </div>
+
+    <div class="uk-navbar-right">
+        <ul class="uk-navbar-nav">
+            <ul class="uk-navbar-nav">
+                <li>
+                    <a href="https://www.linkedin.com/in/juan-francisco-galv%C3%A1n-de-santiago-503764187/">
+                        <span class="uk-icon uk-margin-small-right" uk-icon="icon: linkedin"></span>
+                        LinkedIn
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/Madoka09/">
+                        <span class="uk-icon uk-margin-small-right" uk-icon="icon: github"></span>
+                        Github
+                    </a>
+                </li>
+            </ul>
+        </ul>
+    </div>
+</nav>
+
+<div class="uk-container">
+    <h1>Editar Usuario</h1>
+    <form method="POST" action="/actualizar-usuario/{{usuario.id}}">
+        <fieldset class="uk-fieldset">
+
+            <legend class="uk-legend">Nombre(s)</legend>
+
+            <div class="uk-margin">
+                <input name="nombre" id="nombre" class="uk-input" type="text" placeholder="Introduce tu Nombre"
+                    maxlength="60" required value="{{usuario.nombre}}">
+            </div>
+
+            <legend class="uk-legend">Apellido(s)</legend>
+
+            <div class="uk-margin">
+                <input name="apellido" id="apellido" class="uk-input" type="text" placeholder="Introduce tu Apellido"
+                    maxlength="80" required value="{{usuario.apellido}}">
+            </div>
+
+        </fieldset>
+        <div class="uk-modal-footer uk-text-right">
+            <a href="/dashboard" class="uk-button uk-button-default uk-modal-close" type="button">Cancelar</a>
+            <button class="uk-button uk-button-secondary" type="submit">Guardar Cambios</button>
+        </div>
+    </form>
+</div>

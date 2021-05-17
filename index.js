@@ -35,18 +35,8 @@ app.engine('hbs', exphbs({
 
 app.set('view engine', 'hbs');
 
-/*
-app.use(
-    bodyParser.urlencoded({
-        extended: true,
-    })
-);
-*/
 
 //Configuración de Rutas
-var roles = '';
-var empresas = '';
-
 //Index
 app.get('/', (request, response) => {
     //Obtener roles y empresas
@@ -57,47 +47,121 @@ app.get('/', (request, response) => {
             //Obtener empresas
             axios.get(`${request.protocol}://${request.get('host')}/empresas`)
         ])
-        .then((response) => {
-            console.log(response[0].data)
-            console.log(response[1].data)
-            roles = response[0].data;
-            empresas = response[1].data;
+        .then((res) => {
+            roles = res[0].data;
+            empresas = res[1].data;
+
+            //Dibujar template
+            response.render('index', {
+                roles: roles,
+                empresas: empresas
+            });
         })
         .catch((err) => {
             console.log(err)
         })
-    response.render('index', {
-        roles: roles,
-        empresas: empresas
-    });
 });
 
 //Dashboard
 app.get('/dashboard', (request, response) => {
-    if(request.user){
+    if (request.user) {
         axios.all([
-            //Obntener roles
-            axios.get(`${request.protocol}://${request.get('host')}/roles`),
+                //Obntener roles
+                axios.get(`${request.protocol}://${request.get('host')}/roles`),
 
-            //Obtener empresas
-            axios.get(`${request.protocol}://${request.get('host')}/empresas`),
+                //Obtener empresas
+                axios.get(`${request.protocol}://${request.get('host')}/empresas`),
 
-            //Obtener usuarios
-            axios.get(`${request.protocol}://${request.get('host')}/usuarios`)
-        ])
-        .then((response) => {
-            roles = response[0].data;
-            empresas = response[1].data;
-            usuarios = response[2].data;
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-        response.render('dashboard', {
-            roles: roles,
-            empresas: empresas,
-            usuarios: usuarios
-        });
+                //Obtener usuarios
+                axios.get(`${request.protocol}://${request.get('host')}/usuarios`)
+            ])
+            .then((res) => {
+                roles = res[0].data;
+                empresas = res[1].data;
+                usuarios = res[2].data;
+
+                //Dibujar templaate
+                response.render('dashboard', {
+                    roles: roles,
+                    empresas: empresas,
+                    usuarios: usuarios
+                });
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    } else {
+        response.render('index')
+    }
+})
+
+//Editar Empresa
+app.post('/editar-empresa/', (request, response) => {
+    //Obtener ID de la empresa
+    const {
+        corpId
+    } = request.body
+
+    if (request.user) {
+        const id = parseInt(request.params.id);
+        axios.get(`${request.protocol}://${request.get('host')}/empresas/${corpId}`)
+            .then((res) => {
+                //Dibujar template
+                response.render('editCorps', {
+                    empresa: res.data
+                })
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    } else {
+        response.render('index')
+    }
+})
+
+//Editar Usuario
+app.post('/editar-usuario/', (request, response) => {
+    //Obtener ID de la empresa
+    const {
+        userId
+    } = request.body
+
+    if (request.user) {
+        const id = parseInt(request.params.id);
+        axios.get(`${request.protocol}://${request.get('host')}/usuarios/${userId}`)
+            .then((res) => {
+                //Dibujar template
+                response.render('editUser', {
+                    usuario: res.data
+                })
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    } else {
+        response.render('index')
+    }
+})
+
+//Editar Rol
+app.post('/editar-rol/', (request, response) => {
+    //Obtener ID de la empresa
+    const {
+        roleId
+    } = request.body
+
+    if (request.user) {
+        const id = parseInt(request.params.id);
+        axios.get(`${request.protocol}://${request.get('host')}/roles/${roleId}`)
+            .then((res) => {
+                //Dibujar template
+                response.render('editRole', {
+                    rol: res.data
+                })
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     } else {
         response.render('index')
     }
@@ -113,17 +177,34 @@ app.get('/roles', db.getRoles);
 app.get('/roles/:id', db.getRoleById);
 
 //POST
-app.post('/registrar', db.createUser);
+app.post('/registrar', db.register);
 app.post('/login', db.usrLogin);
-app.post('/empresas', db.createCorp);
 
+//Crear
+app.post('/crear-empresa', db.createCorp);
+app.post('/crear-usuario', db.createUser);
+app.post('/crear-rol', db.createRole);
+
+//Borrar
+app.post('/borrar-empresa/:id', db.deleteCorp);
+app.post('/borrar-usuario/:id', db.deleteUser);
+app.post('/borrar-rol/:id', db.deleteRole);
+
+//Editar
+app.post('/actualizar-empresa/:id', db.updateCorp);
+app.post('/actualizar-usuario/:id', db.updateUser);
+app.post('/actualizar-rol/:id', db.updateRole);
+
+//Para usos en pruebas
 //PUT
-app.put('/usuarios', db.createUser);
-app.put('/empresas', db.createCorp);
+app.put('/crear-usuario', db.createUser);
+app.put('/crear-empresa', db.createCorp);
+app.put('/crear-rol', db.createRole);
 
 //DELETE
-app.delete('/usuarios', db.deleteUser);
-app.delete('/empresas', db.deleteCorp);
+app.delete('/borrar-empresa/:id', db.deleteCorp);
+app.delete('/borrar-usuario/:id', db.deleteUser);
+app.delete('/borrar-rol/:id', db.deleteRole);
 
 
 
