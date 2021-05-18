@@ -26,6 +26,10 @@
 - La aplicación estará funcionando en 
 > localhost:3000
 
+- Acceder usando las credenciales
+> email: admin@admin.com
+> contraseña: password
+
 - Para usar jest comentar el bloque de codigo 209-211
 ```javascript
 app.listen(port, () => {
@@ -40,8 +44,4 @@ app.listen(port, () => {
 
 - Finalmente ejecutar las pruebas con
 > npm test
-
-- Acceder usando las credenciales
-> email: admin@admin.com
-> contraseña: password
 
