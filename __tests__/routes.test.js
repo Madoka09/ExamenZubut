@@ -52,7 +52,7 @@ describe('Get Endpoints', () => {
         expect(res.statusCode).toEqual(200)
     })
 
-    it('Obtener Roles', async () => {
+    it('Obtener Empresas', async () => {
         const res = await request
           .get('/empresas')
         expect(res.statusCode).toEqual(200)
