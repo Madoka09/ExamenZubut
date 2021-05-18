@@ -20,6 +20,27 @@
 - Rellenar las bases de datos con los Seeds
 > npm run db:seeds
 
+- Correr el proyecto con el comando
+> npm run start-nodemon
+
+- La aplicación estará funcionando en 
+> localhost:3000
+
+- Para usar jest comentar el bloque de codigo 209-211
+```javascript
+app.listen(port, () => {
+    console.log(`Aplicación en el puerto ${port}`);
+});
+```
+
+- Para usar jest tambien descomentar la linea 214
+```javascript
+//module.exports = app
+```
+
+- Finalmente ejecutar las pruebas con
+> npm test
+
 - Acceder usando las credenciales
 > email: admin@admin.com
 > contraseña: password

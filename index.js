@@ -35,7 +35,6 @@ app.engine('hbs', exphbs({
 
 app.set('view engine', 'hbs');
 
-
 //Configuración de Rutas
 //Index
 app.get('/', (request, response) => {
@@ -207,7 +206,9 @@ app.delete('/borrar-usuario/:id', db.deleteUser);
 app.delete('/borrar-rol/:id', db.deleteRole);
 
 
-
 app.listen(port, () => {
     console.log(`Aplicación en el puerto ${port}`);
 });
+
+//Descomentar la linea 214 para pruebas de Jest
+//module.exports = app

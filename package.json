@@ -4,10 +4,11 @@
   "description": "Examen para proceso de seleccion de Zubut",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon -r dotenv/config index.js",
+    "test": "jest",
     "db:create": "npx sequelize-cli db:create",
     "db:g:seed": "sequelize-cli seed:generate --name",
-    "db:seeds": "sequelize-cli db:seed:all"
+    "db:seeds": "sequelize-cli db:seed:all",
+    "start-nodemon": "nodemon -r dotenv/config index.js"
   },
   "repository": {
     "type": "git",
@@ -26,12 +27,23 @@
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "express-handlebars": "^5.3.2",
+    "jest": "^26.6.3",
     "nodemon": "^2.0.7",
     "pg": "^8.6.0",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.6.2",
     "sequelize-auto": "^0.8.3",
     "sequelize-auto-migrations": "git+https://github.com/Scimonster/sequelize-auto-migrations.git",
-    "sequelize-cli": "^6.2.0"
+    "sequelize-cli": "^6.2.0",
+    "supertest": "^6.1.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   }
+  
 }
+
+

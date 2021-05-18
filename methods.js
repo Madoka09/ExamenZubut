@@ -127,15 +127,27 @@ const getCorpById = (request, response) => {
 //Guardar Usuario
 const createUser = (request, response) => {
     //Obtener datos del usuario a crear
-    const {
-        nombre,
-        apellido,
-        email,
-        password,
-        password_confirm,
-        empresa,
-        rol
-    } = request.body;
+    if (Object.keys(request.query).length === 0) {
+        var {
+            nombre,
+            apellido,
+            email,
+            password,
+            password_confirm,
+            empresa,
+            rol
+        } = request.body;
+    } else {
+        var {
+            nombre,
+            apellido,
+            email,
+            password,
+            password_confirm,
+            empresa,
+            rol
+        } = request.query;
+    }
 
     //Comprobar campos de contraseña
     if (password === password_confirm) {
@@ -175,7 +187,11 @@ const createUser = (request, response) => {
                         Usuarios.create(usuario)
                             .then(data => {
                                 console.log(data);
-                                return response.redirect('/dashboard')
+                                if (Object.keys(request.query).length === 0) {
+                                    return response.redirect('/dashboard');
+                                } else {
+                                    return response.send(200);
+                                }
                             })
                             .catch(err => {
                                 response.status(500).send(err)
@@ -309,14 +325,22 @@ const usrLogin = (request, response) => {
 
 //Guardar Empresa
 const createCorp = (request, response) => {
-    //Obtener datos de la empresa a crear
-    const {
-        nombre_legal,
-        nombre_comercial,
-        rfc,
-        telefono
-    } = request.body;
-
+    //Obtener datos del request
+    if (Object.keys(request.query).length === 0) {
+        var {
+            nombre_legal,
+            nombre_comercial,
+            rfc,
+            telefono
+        } = request.body;
+    } else {
+        var {
+            nombre_legal,
+            nombre_comercial,
+            rfc,
+            telefono
+        } = request.query;
+    }
     //Comprobar que la empresa existe
     let existingCorp = '';
     try {
@@ -344,7 +368,11 @@ const createCorp = (request, response) => {
                     Empresas.create(newCorp)
                         .then(data => {
                             console.log('OK')
-                            return response.redirect('/dashboard');
+                            if (Object.keys(request.query).length === 0) {
+                                return response.redirect('/dashboard');
+                            } else {
+                                return response.send(200);
+                            }
                         })
                         .catch(err => {
                             response.status(500).send(err);
@@ -359,10 +387,15 @@ const createCorp = (request, response) => {
 //Crear Rol
 const createRole = (request, response) => {
     //Obtener datos del request
-    const {
-        role
-    } = request.body;
-
+    if (Object.keys(request.query).length === 0) {
+        var {
+            role
+        } = request.body;
+    } else {
+        var {
+            role
+        } = request.query;
+    }
     //Comprobar que el rol existe
     let existingRole = '';
     try {
@@ -385,7 +418,11 @@ const createRole = (request, response) => {
                     Roles.create(newRole)
                         .then(data => {
                             console.log('OK')
-                            return response.redirect('/dashboard');
+                            if (Object.keys(request.query).length === 0) {
+                                return response.redirect('/dashboard');
+                            } else {
+                                return response.send(200);
+                            }
                         })
                         .catch(err => {
                             response.status(500).send(err);
